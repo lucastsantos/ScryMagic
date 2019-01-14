@@ -14,9 +14,9 @@
     ],
     "content_scripts": [
         {
-            "run_at" :"document_idle",
+            "run_at" :"document_end",
             "matches": ["https://scryfall.com/card/*"],
-            "js": ["scripts/jquery-3.3.1.slim.min.js", "on_document_idle.js"]
+            "js": ["scripts/jquery-3.3.1.slim.min.js", "on_document_end.js"]
         }
     ]
   }
