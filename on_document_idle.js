@@ -1,8 +1,11 @@
 function config() {
-    var cardName  = document.querySelectorAll('meta[property="og:title"]')[0]
-        .attributes["content"]
-        .nodeValue
-        .replace(/"/g, "");
+	var cardName = $('.card-text-title')
+		.first()
+		.clone()
+		.children()
+			.remove()
+		.end()
+		.text().trim().replace(/"/g, "");
 
     var url = "https://www.ligamagic.com.br/?view=cards/card&card=" + cardName;
 
@@ -21,7 +24,7 @@ function addLigaMagicDiv(url) {
     var headerRow = header.insertRow(0);     
 
     var firstHeaderCell = document.createElement('th');
-    firstHeaderCell.innerHTML = "<a href=\""+ url +"\">LigaMagic</a>";
+    firstHeaderCell.innerHTML = '<a href="' + url + '">LigaMagic</a>';
     headerRow.appendChild(firstHeaderCell);
 
     var secondHeaderCell = document.createElement('th');
@@ -64,23 +67,23 @@ function onSuccess(doc, url) {
         // First row: Lowest
         var lowestRow = tbody.insertRow();     
         var firstLowestCell = lowestRow.insertCell();
-        firstLowestCell.innerHTML = "<a data-component=\"card-tooltip\" href=\"" + url + "\">Menor Preço</a>";
+        firstLowestCell.innerHTML = '<a data-component="card-tooltip" href="' + url + '">Menor Preço</a>';
         
         var secondLowestCell = lowestRow.insertCell();
-        secondLowestCell.innerHTML = "<a class=\"currency-usd\" href=\"" + url + "\">" + lowerPrice + "</a>";
+        secondLowestCell.innerHTML = '<a class="currency-usd" href="' + url + '">' + lowerPrice + '</a>';
         
         // Second row: Highest
         var highestRow = tbody.insertRow();     
         var firstHighestCell = highestRow.insertCell();
-        firstHighestCell.innerHTML = "<a data-component=\"card-tooltip\" href=\"" + url + "\">Maior Preço</a>";
+        firstHighestCell.innerHTML = '<a data-component="card-tooltip" href="' + url + '">Maior Preço</a>';
         
         var secondHighestCell = highestRow.insertCell();
-        secondHighestCell.innerHTML = "<a class=\"currency-tix\" href=\"" + url + "\">" + higherPrice + "</a>";
+        secondHighestCell.innerHTML = '<a class="currency-tix" href="' + url + '">' + higherPrice + '</a>';
     } catch(e) {
         // Add error row
         var errorRow = tbody.insertRow();     
         var errorCell  = errorRow.insertCell();
-        errorCell.innerHTML = "<a data-component=\"card-tooltip\" href=\"" + url + "\">Deu ruim! :(</a>";
+        errorCell.innerHTML = '<a data-component="card-tooltip" href="' + url + '">Deu ruim! :(</a>';
     }
     
     table.appendChild(tbody);
@@ -93,9 +96,9 @@ function onError(statusText) {
     // Add error row
     var errorRow = tbody.insertRow();     
     var errorCell  = errorRow.insertCell();
-    errorCell.innerHTML = "<a data-component=\"card-tooltip\" href=\"" + url + "\">Deu ruim! :(</a>";
+    errorCell.innerHTML = '<a data-component="card-tooltip" href="' + url + '">Deu ruim! :(</a>';
     
     table.appendChild(tbody);
 }
 
-config();
+config();	
