@@ -10,8 +10,13 @@
     },
     "permissions": [
         "activeTab",
-        "https://www.ligamagic.com.br/*"
+        "*://*.ligamagic.com.br/*",
+        "*://*.scryfall.com/*"
     ],
+    "background": {
+        "scripts": ["bg_page.js"],
+        "persistent": false
+    },
     "content_scripts": [
         {
             "run_at" :"document_end",
