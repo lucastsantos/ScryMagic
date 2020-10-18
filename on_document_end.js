@@ -1,3 +1,15 @@
+// https://gomakethings.com/converting-a-string-into-markup-with-vanilla-js/#:~:text=The%20DOMParser()%20object%20creates,string%20as%20it's%20first%20argument.
+/**
+ * Convert a template string into HTML DOM nodes
+ * @param  {String} str The template string
+ * @return {Node}       The template HTML
+ */
+var stringToHTML = function (str) {
+	var dom = document.createElement('div');
+	dom.innerHTML = str;
+	return dom;
+};
+
 function config() {
 	var cardName = $('.card-text-title')
 		.first()
@@ -7,10 +19,13 @@ function config() {
 		.end()
 		.text().trim().replace(/"/g, "");
 
+    // Mobile url: "https://www.ligamagic.com.br/_mobile_lm/ajax/search.php?unixt=1603048755236&&card=" + cardName + "&cardID=0&cardAux=&exactMatch=1&orderBy=1&page=1&category=1"
     var url = "https://www.ligamagic.com.br/?view=cards/card&card=" + cardName;
 
     addLigaMagicDiv(url);
-    getLigaMagicCard(url);
+
+    // Fetch url (goes to bg_page.js)
+    chrome.runtime.sendMessage(url, data => onSuccess(data, url)); 
 }
 
 function addLigaMagicDiv(url) {
@@ -36,26 +51,8 @@ function addLigaMagicDiv(url) {
     tablesContainer.appendChild(table);
 }
 
-function getLigaMagicCard(url) {
-    var xhr = new XMLHttpRequest();
-    xhr.ontimeout = function () {
-        onError("Timeout");
-    };
-    xhr.onload = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                onSuccess(xhr.response, url);
-            } else {
-                onError(xhr.statusText);
-            }
-        }
-    };
-    xhr.open("GET", url, true);
-    xhr.responseType = "document";
-    xhr.send(null);
-}
-
-function onSuccess(doc, url) {
+function onSuccess(docString, url) {
+    var doc = stringToHTML(docString);
     var table = document.getElementById("ligamagic");
     var tbody = document.createElement("tbody");
     
@@ -85,18 +82,6 @@ function onSuccess(doc, url) {
         var errorCell  = errorRow.insertCell();
         errorCell.innerHTML = '<a data-component="card-tooltip" href="' + url + '">Deu ruim! :(</a>';
     }
-    
-    table.appendChild(tbody);
-}
-
-function onError(statusText) {
-    var table = document.getElementById("ligamagic");
-    var tbody = document.createElement("tbody");
-    
-    // Add error row
-    var errorRow = tbody.insertRow();     
-    var errorCell  = errorRow.insertCell();
-    errorCell.innerHTML = '<a data-component="card-tooltip" href="' + url + '">Deu ruim! :(</a>';
     
     table.appendChild(tbody);
 }
